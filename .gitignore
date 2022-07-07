@@ -1,1 +1,6 @@
 example/compile_files/*
+.DS_Strore
+src/model/.DS_Store
+src/model/slprj/*
+src/model/model01_rsim_rtw/
+src/.DS_Store
