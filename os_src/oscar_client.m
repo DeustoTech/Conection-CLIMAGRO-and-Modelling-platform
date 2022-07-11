@@ -3,7 +3,7 @@ clear;
 fp = folderpath;
 cd(fp);
 
-uri = '0.0.0.0';
+uri = 'localhost';
 port = 4000;
 itcp = tcpclient(uri,port);
 pause(1)

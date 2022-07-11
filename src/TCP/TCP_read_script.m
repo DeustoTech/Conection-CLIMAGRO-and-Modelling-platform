@@ -7,7 +7,7 @@ while ~exist('itcp')
     
     fprintf(now_str+" : Cliente de Simulacion esperando a Oscar\n")
     try
-        uri = '0.0.0.0';
+        uri = 'localhost';
         port = 8000;
         itcp = tcpclient(uri,port);
         fprintf(now_str+" : Se ha conectado\n\n")
