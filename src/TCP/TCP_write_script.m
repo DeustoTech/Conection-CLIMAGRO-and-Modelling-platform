@@ -3,7 +3,19 @@ fp = folderpath;
 cd(fp)
 uri = '0.0.0.0';
 port = 4000;
-itcp = tcpserver(uri,port);
+
+iscreated = false;
+
+while ~iscreated
+    try 
+        itcp = tcpserver(uri,port);
+        iscreated = true;
+    catch err
+        
+        fprintf(err.message+"\n")
+        pause(2)
+    end
+end
 
 dt = dt_wait();
 
@@ -28,15 +40,15 @@ while true
             pause(1)
             continue
         end
-        Ti = rt_yout.signals(1).values(end,2);
-        Tw = rt_yout.signals(2).values(end);    
+        T_air = rt_yout.signals(1).values(end,2);
+        T_retorno = rt_yout.signals(2).values(end);    
     else
-        Tw = 10;
-        Ti = 14;
+        T_retorno = 10;
+        T_air = 14;
     end
     
-    x.Ti = Ti;
-    x.Tw = Tw;
+    x.T_air_simu = T_air;
+    x.T_retorno_simu = T_retorno;
     x.t = t;
     
     if itcp.Connected

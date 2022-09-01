@@ -14,3 +14,8 @@ climate_GH3.A_f = 200;
 climate_GH3.A_c = 200;
 climate_GH3.alpha_i = 0;
 flow= 0;
+
+%%
+crop_params = crop_p;
+crop_params.A_v = 180;
+%

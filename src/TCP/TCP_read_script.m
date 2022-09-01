@@ -11,6 +11,8 @@ while ~exist('itcp')
         port = 8000;
         itcp = tcpclient(uri,port);
         fprintf(now_str+" : Se ha conectado\n\n")
+    catch err
+        err.message
     end
     pause(1)
 end
@@ -36,15 +38,12 @@ while true
    end
    
    
-   if ~isempty(r)
-       QSOFC = r.QSOFC;
-       flow  = r.flow;
-       fprintf("Se ha  leido la clave  "+jsonencode(r)+" \n")
-
+   if ~isempty(r)       
+       fprintf("La simulacion ha  leido la clave  "+jsonencode(r)+" \n")
    else
-      QSOFC = 0;
-      flow  = 0;
-      fprintf('No se se encuentra la clave .QSOFC\n')
+
+      r = 0;
+      fprintf('no se ha podido leer nada\n')
       try 
         itcp = tcpclient(uri,port);
         fprintf(now_str+" : Se ha conectado\n\n")
@@ -53,7 +52,8 @@ while true
       end
    end
 
-   save('src/model/io/in.mat','QSOFC','flow')
+   save('src/model/io/in.mat','r')
+
    fprintf(now_str+" : "+'Se ha actualizado src/model/io/in.mat \n\n')
    pause(dt)
    

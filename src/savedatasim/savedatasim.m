@@ -27,10 +27,17 @@ while true
            continue
         end
         
+        try
         for irt =  rt_yout.signals
-            sample.(irt.label) = irt.values(end,:);
+            label = replace(replace(irt.label,'<',''),'>','');
+            sample.(label) = irt.values(end,:);
         end
         sample.t = posixtime(dat_time);
+        catch 
+            fprintf('Error en el parseo de rt_yout a tipo estructura  \n\n')
+            pause(1)
+            continue 
+        end 
    else
         fprintf('No existe el fichero src/model/io/out.mat\n\n')
         pause(1)

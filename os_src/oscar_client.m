@@ -5,8 +5,17 @@ cd(fp);
 
 uri = 'localhost';
 port = 4000;
-itcp = tcpclient(uri,port);
-pause(1)
+
+isconnected = false;
+while ~isconnected
+    try 
+        itcp = tcpclient(uri,port);
+        isconnected = true;
+    catch
+        fprintf(now_str+':  Cliente de Oscar Esperando!\n\n')
+    end
+end
+pause(2)
 
 r = [];
 dt = dt_wait();
@@ -17,15 +26,11 @@ while true
         r = read_ast(itcp);
    end
    if ~isempty(r)
-       Ti = r.Ti;
-       Tw = r.Tw;
 
        fprintf(now_str+" : "+"Se ha  leido la clave "+jsonencode(r)+"\n\n")
-
    else
-      Ti = 0;
-      Tw = 0;
       fprintf(now_str+" : "+'No se se encuentra la clave \n')
+      
    end
    
     pause(dt)

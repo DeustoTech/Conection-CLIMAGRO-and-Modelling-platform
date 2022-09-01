@@ -1,4 +1,11 @@
 clear
+
+  
+mtotal = 100;       % [kg{H2O}]     masa total de agua 
+cp_H2O = 4182;      % [J/(Kg . K)]  calor especificio de agua 
+area = 150;         % [m^2]         area en contacto 
+lamb_s = 2;         % [W/(mK)]      conductividad termica 
+l_w = 0.01;         % [m]           grosor
 load('data/exclima.mat')
 ds.DateTime = ds.DateTime + days(2*365);
 
@@ -25,7 +32,7 @@ time0 = now_unix;
 told = time0;
 pause(1)
 times_ve = 60*15;
-times_ve = 60*30;
+times_ve = 4*60*30;
 
 clima_fcn = griddedInterpolant(posixtime(ds.DateTime),[ds.temp ds.RadCloud ds.humidity ds.wind_speed]);
 
@@ -48,26 +55,44 @@ while true
         load(fp_out)
         T0 = rt_yout.signals(1).values(end,:);
         Tw = rt_yout.signals(2).values(end,:);    
-        G0 = rt_yout.signals(5).values(end,:);
-        Tw_SOFC = rt_yout.signals(6).values(end,:);    
-        %clear rt_yout rt_tout
+        G0 = rt_yout.signals(3).values(end,:);
+        %
+        cx0 = rt_yout.signals(7).values(end,:);
+        Tv    = cx0(1);
+        Tsum  = cx0(2);
+        C_wv  = cx0(3);
+        C = rt_yout.signals(8).values(end,:);
+        R = rt_yout.signals(9).values(end,:);
+        N = rt_yout.signals(10).values(:,:,end);
+        %
     else
         G0 = [ 0.0050   0.0007];
         T0 = [287.1500  287.1500  287.1500  287.1500];
         Tw = 287.15;
-        Tw_SOFC = 287.15;
+        %
+        Tv    = 10 + 273;
+        Tsum  = 0;
+        C_wv  = 0;
+        C = crop_params.C;
+        R = crop_params.R;
+        N = crop_params.N;
     end
     %%
     if exist(fp_in,'file')
         try 
             load(fp_in)
+            for ifield = fieldnames(r)'
+                eval(ifield{:} + "= r."+ifield{:}+";")
+            end
         catch
-            fprintf('Error en la lectura de im.out\n\n')
+            fprintf('Error en la lectura de in.out\n\n')
             pause(1)
         end
     else
-        QSOFC = 0;
-        flow = 0;
+        T_ida_real = 273.15;
+        T_retorno_real = 273.15;
+        AR_state_real = 0;
+        flow_real = 0;
     end
     dat_time = datetime('now');
     new_date = epo2date(times_ve*(posixtime(dat_time) - time0) + time0);

@@ -5,3 +5,4 @@ src/model/slprj/*
 src/model/model01_rsim_rtw/
 src/.DS_Store
 src/model/data/*
+slprj/*
