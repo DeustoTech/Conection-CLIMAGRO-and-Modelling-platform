@@ -43,12 +43,12 @@ while true
         T_air = rt_yout.signals(1).values(end,2);
         T_retorno = rt_yout.signals(2).values(end);    
     else
-        T_retorno = 10;
-        T_air = 14;
+        T_retorno = 10 + 273.15;
+        T_air = 14 + 273.15;
     end
     
-    x.T_air_simu = T_air;
-    x.T_retorno_simu = T_retorno;
+    x.T_air_simu = T_air - 273.15;
+    x.T_retorno_simu = T_retorno - 273.15;
     x.t = t;
     
     if itcp.Connected

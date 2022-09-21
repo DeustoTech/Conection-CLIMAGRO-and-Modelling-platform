@@ -8,9 +8,10 @@ cd(fp)
 
 
 every_iter = 20;
-every_iter = 5;
+%every_iter = 5;
 
 dt = 2*dt_wait();
+dt = 60;
 
 iter = 0;
 

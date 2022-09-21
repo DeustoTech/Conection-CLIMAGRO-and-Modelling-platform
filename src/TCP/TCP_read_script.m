@@ -35,6 +35,7 @@ while true
    
    while itcp.NumBytesAvailable > 0
         r = read_ast(itcp);
+        pause(0.01)
    end
    
    

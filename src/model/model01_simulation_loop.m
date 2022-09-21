@@ -32,8 +32,8 @@ time0 = now_unix;
 told = time0;
 pause(1)
 times_ve = 60*15;
-times_ve = 4*60*30;
-
+times_ve = 60*30;
+times_ve = 1;
 clima_fcn = griddedInterpolant(posixtime(ds.DateTime),[ds.temp ds.RadCloud ds.humidity ds.wind_speed]);
 
 
@@ -84,13 +84,15 @@ while true
             for ifield = fieldnames(r)'
                 eval(ifield{:} + "= r."+ifield{:}+";")
             end
+            T_ida_real = T_ida_real + 273.15;
+            T_retorno_real = T_retorno_real + 273.15;
         catch
             fprintf('Error en la lectura de in.out\n\n')
             pause(1)
         end
     else
-        T_ida_real = 273.15;
-        T_retorno_real = 273.15;
+        T_ida_real = 15 + 273.15;
+        T_retorno_real = 15 +273.15;
         AR_state_real = 0;
         flow_real = 0;
     end

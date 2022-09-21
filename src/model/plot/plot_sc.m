@@ -20,6 +20,7 @@ Tw   = vertcat(full_data.Tw) - 273.15;
 %TwSOFC   = vertcat(full_data.TwSOFC) - 273.15
 IC   = vertcat(full_data.IC);
 %QS = vertcat(full_data.Q_SOFC);
+figure(1)
 clf
 %
 subplot(4,1,1)
@@ -55,7 +56,7 @@ plot(t,EC(:,1)-273.15,'.-')
 plot(t,Tw,'.-')
 plot(t,[full_data.T_ida]-273.15)
 
-
+title('flow')
 legend('Ti','Te','Tretorno','Tida')
 
 
