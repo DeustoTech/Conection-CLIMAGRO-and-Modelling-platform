@@ -7,3 +7,10 @@ src/.DS_Store
 src/model/data/*
 slprj/*
 *.log
+src/dependences/Crops-Simulations-KPI/dependences/*
+src/dependences/Crops-Simulations-KPI/slprj/*
+*slxc
+src/dependences/Crops-Simulations-KPI/rl.mat
+src/dependences/Crops-Simulations-KPI/rl365.mat
+src/dependences/Crops-Simulations-KPI/rl365_2.mat
+src/dependences/Crops-Simulations-KPI/rl_365.mat

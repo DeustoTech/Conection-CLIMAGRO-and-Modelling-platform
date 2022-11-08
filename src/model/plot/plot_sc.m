@@ -13,53 +13,18 @@ for imat = r.mat'
 end
 
 %%
-t = epo2date(vertcat(full_data.t));
-Temp = vertcat(full_data.Temp) - 273.15;
-EC   = vertcat(full_data.EC);
-Tw   = vertcat(full_data.Tw) - 273.15;
-%TwSOFC   = vertcat(full_data.TwSOFC) - 273.15
-IC   = vertcat(full_data.IC);
-%QS = vertcat(full_data.Q_SOFC);
-figure(1)
+DateTime = [];
+Ti = [];
+HD = [];
+for j = 1:length(full_data)
+    DateTime = [DateTime ;full_data{j}.DateTime];
+    Ti = [Ti; full_data{j}.GH.IC.Temp.Tair];
+    HD = [HD; full_data{j}.HeatDemand];
+end
+%%
 clf
-%
-subplot(4,1,1)
-hold on
-plot(t,Temp,'.-')
-%plot(t,EC(:,1)-273.15,'.-')
-legend('Tc','Ti','Tf','Ts','Te')
-
-subplot(4,1,2)
-hold on
-plot(t,Tw,'--')
-%plot(t,TwSOFC,'.')
-plot(t,[full_data.T_ida]-273.15)
-plot(t,Temp(:,2),'.-')
-plot(t,EC(:,1)-273.15,'.-')
-
-legend('Tw_{GH}','Tw_{ida}','T_i','Te')
-subplot(4,1,3)
-
-Carbon = vertcat(full_data.Carbon);
-
-plot(t,Carbon,'.-')
-legend('Buff','Fruit','Leaf','Stem')
-
-subplot(4,1,4)
-plot(t,[full_data.flow],'.-')
-%%
-figure(2)
-clf 
-hold on
-plot(t,Temp(:,2),'.-')
-plot(t,EC(:,1)-273.15,'.-')
-plot(t,Tw,'.-')
-plot(t,[full_data.T_ida]-273.15)
-
-title('flow')
-legend('Ti','Te','Tretorno','Tida')
-
-
-
-%%
-IC_st = parseIndoorClimate_matrix(IC);
+subplot(2,1,1)
+plot(DateTime,Ti-273.15,'.-')
+subplot(2,1,2)
+plot(DateTime,HD/1e3,'.-')
+ylabel('kW')

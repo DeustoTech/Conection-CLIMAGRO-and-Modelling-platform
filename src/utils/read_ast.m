@@ -16,7 +16,8 @@ if ~isempty(stotal)
     try
     stotal = jsondecode(stotal);
     catch
-        fprintf('Formato recibido no es un json!\n')
+        
+        fprintf("Formato recibido no es un json! - -"+stotal+"\n")
         stotal = [];
     end
 else

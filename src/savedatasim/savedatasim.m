@@ -7,14 +7,14 @@ cd(fp)
 
 
 
-every_iter = 20;
+every_iter = 10;
 %every_iter = 5;
 
 dt = 2*dt_wait();
-dt = 60;
+%dt = 60;
 
 iter = 0;
-
+data = [];
 while true
 
    iter = iter + 1;
@@ -29,13 +29,10 @@ while true
         end
         
         try
-        for irt =  rt_yout.signals
-            label = replace(replace(irt.label,'<',''),'>','');
-            sample.(label) = irt.values(end,:);
-        end
-        sample.t = posixtime(dat_time);
+            
+            sample = result;
         catch 
-            fprintf('Error en el parseo de rt_yout a tipo estructura  \n\n')
+            fprintf('Error en el parseo de rt_yout a tipo estructura  \n\n Comprobar que todas las salidas del modelo de simulink tengan nombre')
             pause(1)
             continue 
         end 
@@ -48,7 +45,7 @@ while true
    id = mod(iter,every_iter);  
    
    if id == 0
-     data(every_iter) = sample;
+     data{every_iter} = sample;
      fprintf(every_iter+"\n")
      
       file = now_str() + "_simulation.mat";
@@ -56,7 +53,7 @@ while true
       clear data;
       fprintf(file+"\n")
    else
-      data(id) = sample;
+      data{id} = sample;
       fprintf(id+"\n")
    end
 

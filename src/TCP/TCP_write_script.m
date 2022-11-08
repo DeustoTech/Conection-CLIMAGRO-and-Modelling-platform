@@ -40,15 +40,22 @@ while true
             pause(1)
             continue
         end
-        T_air = rt_yout.signals(1).values(end,2);
-        T_retorno = rt_yout.signals(2).values(end);    
+        T_air     = 0;
+        T_retorno = 0;
+        
+        Qdemand = result.HeatDemand(end);
+        AR = result.AR(end);
     else
         T_retorno = 10 + 273.15;
         T_air = 14 + 273.15;
+        Qdemand = 0;
+        AR = 0;
     end
     
     x.T_air_simu = T_air - 273.15;
     x.T_retorno_simu = T_retorno - 273.15;
+    x.Qdemand = Qdemand;
+    x.Artificial_Lighting = AR;
     x.t = t;
     
     if itcp.Connected

@@ -1,6 +1,6 @@
 clear 
 %% Abrimos el modelo de Simulonk
-load_system('crop_simulation')
+open_system('crop_simulation')
 % Opcion de simulion para acelerar la simulacion 
 set_param('crop_simulation', 'MinimalZcImpactIntegration', 'on')
 set_param('crop_simulation','SimulationMode','normal')
@@ -12,15 +12,7 @@ fp_in    = fullfile(fp_model,'io','in.mat');
 fp_out   = fullfile(fp_model,'io','out.mat');
 %%
 %
-% 
-compute_ec = false;
-if compute_ec
-    [Hours,tt,Si,vv,HR,ChangeDay] = LoadExternalClimate;
-    save(fullfile(fp_model,'EC'),'Hours','tt','Si','vv','HR','ChangeDay')
-else 
-    load(fullfile(fp_model,'EC'))
-end
-%
+[Hours,tt,Si,vv,HR,ChangeDay] = LoadExternalClimate;
 %%
 parameters = LoadParameters_TCP_IP();
 %% 
@@ -34,32 +26,27 @@ insignal.Qreal = 1; % [W]
 insignal.Tw      = 273.15 + 80; % [K]
 %%
 %
-dt_w = dt_wait; % Sample time of loop;
+dt_w = 3; % Sample time of loop;
 %
-t0      = datetime('01-Feb-2019'); % Hora de simulacion
-t0_real = datetime('08-Nov-2022 12:00:00'); % Hora a la que empieza realmente la simulacion
-faster = 60; % Cada segundo se multiplica por este factor;
-pause(dt_w)
-
+t0 = datetime('01-Feb-2019'); % 
+faster = 60*60*6; % Cada segundo se multiplica por este factor;
+tic;
 %
 D01_Jan = datetime('01-Jan-2019');
 while true 
     
     % Controlamos el tiempo 
-    dt = datetime('now') - t0_real;
-    tnew = t0 + faster*dt;
+    dt = toc;
+    tnew = t0 + faster*seconds(dt);
 
     StartTime = days(tnew - D01_Jan);
     StopTime     = StartTime +  dt_w*faster/(3600*24);
 
-    InitDate = days(StartTime) + D01_Jan;
-    EndDate  = days(StopTime)  + D01_Jan;
-    %
     fprintf ("Simulation will be run " +  ...
             "from : "  + num2str(StartTime,'%.4f')+ ...
-             " | to : " + num2str(StopTime,'%.4f')+" | " + ...
-             "from : "  + string(InitDate)+ ...
-             " | to : " + string(EndDate)+"\n\n" ) 
+             " | to : " + num2str(StopTime,'%.4f')+"\n") + ...
+             "from : "  + string(days(StartTime) + D01_Jan)+ ...
+             " | to : " + string(days(StopTime)  + D01_Jan)+"\n" ) 
          
     tic_simu = tic; % tiempo que tarda la simulacion
     %
@@ -74,12 +61,7 @@ while true
     % ----------------------------------------------
     % Leemos los datos señales externas 
     if exist(fp_in,'file')
-        load(fp_in) % se carga la variable insignal
-        % 
-        if isempty(insignal)
-            insignal.Qreal = 1; % [W]
-            insignal.Tw      = 273.15 + 80; % [K]
-        end
+        load(fp_in) % se carga la variable r
     end
     % ----------------------------------------------
     %
@@ -90,11 +72,10 @@ while true
     rl = sim('crop_simulation', ...
         'StartTime',num2str(StartTime,'%.4f'), ...
         'StopTime',num2str(StopTime,'%.4f'));
-    %%
     %% 
     % En esta variable se encuentra todo los resultados de las simulacion
-    result = parse_data_tcp_ip(rl,InitDate);
-    % 
+    result = parse_data_tcp_ip(rl);
+
     %% 
     save('src/model/io/out.mat','result')
 

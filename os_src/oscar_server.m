@@ -23,10 +23,9 @@ end
 
 while true
     t = now_unix;
-    x.T_ida_real =   273.15 + 20 +10*sin(2*pi*t/60);
-    x.T_retorno_real = 273.15 + 20 + 10*cos(2*pi*t/60);
     x.AR_state_real = 1;
-    x.flow_real = 8;
+    x.Qreal = 1;
+    x.Tw =  80;
     x.t = t;
     write_ast(itcp,x)
     pause(dt)

@@ -43,7 +43,7 @@ while true
        fprintf("La simulacion ha  leido la clave  "+jsonencode(r)+" \n")
    else
 
-      r = 0;
+      r = [];
       fprintf('no se ha podido leer nada\n')
       try 
         itcp = tcpclient(uri,port);
@@ -53,7 +53,9 @@ while true
       end
    end
 
-   save('src/model/io/in.mat','r')
+   insignal = r;
+
+   save('src/model/io/in.mat','insignal')
 
    fprintf(now_str+" : "+'Se ha actualizado src/model/io/in.mat \n\n')
    pause(dt)
